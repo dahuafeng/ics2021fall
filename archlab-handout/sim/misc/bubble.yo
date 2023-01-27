@@ -1,0 +1,60 @@
+                            | #凤大骅 2000012965
+0x000:                      | 	.pos 0
+0x000: 30f40002000000000000 | 	irmovq stack, %rsp
+0x00a: 804800000000000000   | 	call main
+0x013: 00                   | 	halt
+                            | 	
+0x018:                      | 	.align 8
+0x018:                      | array:
+0x018: ca0b000000000000     | 	.quad 0xbca
+0x020: ba0c000000000000     | 	.quad 0xcba
+0x028: cb0a000000000000     | 	.quad 0xacb
+0x030: ab0c000000000000     | 	.quad 0xcab
+0x038: bc0a000000000000     | 	.quad 0xabc
+0x040: ac0b000000000000     | 	.quad 0xbac
+                            | 	
+0x048:                      | main:
+0x048: 30f71800000000000000 | 	irmovq array,%rdi
+0x052: 30f60600000000000000 | 	irmovq $6,%rsi
+0x05c: 806600000000000000   | 	call bubble_sort
+0x065: 90                   | 	ret
+                            | 
+0x066:                      | bubble_sort:
+0x066: 30f80800000000000000 | 	irmovq	$8,%r8			
+0x070: 30fb0100000000000000 | 	irmovq	$1,%r11			
+0x07a: 2072                 | 	rrmovq	%rdi,%rdx		
+0x07c: 708900000000000000   | 	jmp	test0			
+0x085:                      | loop0:
+0x085: 6082                 | 	addq	%r8,%rdx		
+0x087: 61b6                 | 	subq	%r11,%rsi		
+0x089:                      | test0:
+0x089: 6266                 | 	andq	%rsi,%rsi		
+0x08b: 748500000000000000   | 	jne	loop0			
+0x094: 6182                 | 	subq	%r8,%rdx		
+0x096: 70f000000000000000   | 	jmp	test1			
+0x09f:                      | loop1:
+0x09f: 2071                 | 	rrmovq	%rdi,%rcx		
+0x0a1: 70e100000000000000   | 	jmp	test2			
+0x0aa:                      | loop2:
+0x0aa: 50910000000000000000 | 	mrmovq	(%rcx),%r9		
+0x0b4: 50a10800000000000000 | 	mrmovq	8(%rcx),%r10		
+0x0be: 20ab                 | 	rrmovq %r10,%r11
+0x0c0: 619b                 | 	subq	%r9,%r11		
+0x0c2: 75df00000000000000   | 	jge	skip			
+0x0cb: 40910800000000000000 | 	rmmovq	%r9,8(%rcx)
+0x0d5: 40a10000000000000000 | 	rmmovq %r10,(%rcx)		
+0x0df:                      | skip:
+0x0df: 6081                 | 	addq	%r8,%rcx		
+0x0e1:                      | test2:
+0x0e1: 201b                 | 	rrmovq	%rcx,%r11
+0x0e3: 632b                 | 	xorq	%rdx,%r11		
+0x0e5: 74aa00000000000000   | 	jne	loop2			
+0x0ee: 6182                 | 	subq	%r8,%rdx		
+0x0f0:                      | test1:
+0x0f0: 202b                 | 	rrmovq	%rdx,%r11
+0x0f2: 617b                 | 	subq	%rdi,%r11		
+0x0f4: 769f00000000000000   | 	jg	loop1			
+0x0fd: 90                   | 	ret
+                            | 	
+0x200:                      | 	.pos 0x200
+0x200:                      | stack:

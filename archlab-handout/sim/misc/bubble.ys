@@ -1,0 +1,60 @@
+#凤大骅 2000012965
+	.pos 0
+	irmovq stack, %rsp
+	call main
+	halt
+	
+	.align 8
+array:
+	.quad 0xbca
+	.quad 0xcba
+	.quad 0xacb
+	.quad 0xcab
+	.quad 0xabc
+	.quad 0xbac
+	
+main:
+	irmovq array,%rdi
+	irmovq $6,%rsi
+	call bubble_sort
+	ret
+
+bubble_sort:
+	irmovq	$8,%r8			
+	irmovq	$1,%r11			
+	rrmovq	%rdi,%rdx		
+	jmp	test0			
+loop0:
+	addq	%r8,%rdx		
+	subq	%r11,%rsi		
+test0:
+	andq	%rsi,%rsi		
+	jne	loop0			
+	subq	%r8,%rdx		
+	jmp	test1			
+loop1:
+	rrmovq	%rdi,%rcx		
+	jmp	test2			
+loop2:
+	mrmovq	(%rcx),%r9		
+	mrmovq	8(%rcx),%r10		
+	rrmovq %r10,%r11
+	subq	%r9,%r11		
+	jge	skip			
+	rmmovq	%r9,8(%rcx)
+	rmmovq %r10,(%rcx)		
+skip:
+	addq	%r8,%rcx		
+test2:
+	rrmovq	%rcx,%r11
+	xorq	%rdx,%r11		
+	jne	loop2			
+	subq	%r8,%rdx		
+test1:
+	rrmovq	%rdx,%r11
+	subq	%rdi,%r11		
+	jg	loop1			
+	ret
+	
+	.pos 0x200
+stack:
